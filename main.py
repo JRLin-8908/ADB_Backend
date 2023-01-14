@@ -29,7 +29,7 @@ def index():
                 SELECT s.latitude, s.longitude
                 FROM public.supplier AS s
                 JOIN public.county_moi_1090820 AS c
-                ON ST_Intersects(s.geom, c.geom)
+                ON ST_Intersects(ST_Transform(s.geom, 4326), ST_Transform(c.geom, 4326))
 
             """
             if district != '全臺灣': sql_cmd = sql_cmd + "WHERE c.countyname = {district}"
@@ -39,7 +39,7 @@ def index():
                 SELECT f.latitude, f.longitude
                 FROM public.{festival} AS f
                 JOIN public.county_moi_1090820 AS c
-                ON ST_Intersects(f.geom, c.geom)
+                ON ST_Intersects(ST_Transform(f.geom, 4326), ST_Transform(c.geom, 4326))
 
             """
             if district != '全臺灣': sql_cmd = sql_cmd + "WHERE c.countyname = {district}"
