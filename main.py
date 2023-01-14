@@ -13,13 +13,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:password@localhos
 
 db.init_app(app)
 
-@app.route('/', methods = ['POST'])
+@app.route('/', methods = ['GET', 'POST'])
 def index():
-    festival = 'xmassorder2011' if request.json['festival'] == 'Xmas' else 'chines_new_year'
-    item = request.json['item']
-    district = request.json['district']
-
     res = []
+    #if request.method == 'GET': return json.dumps(res)
+    param = request.json()
+    festival = 'xmassorder2011' if param['festival'] == 'Xmas' else 'chines_new_year'
+    item = param['item']
+    district = param['district']
+
     if festival and item and district:
 
         if item == 'Suppliers':
@@ -47,7 +49,8 @@ def index():
             res.append(dict(zip(['lat', 'lng'], row)))
 
     return json.dumps(res)
+    #return json.dumps({"lat":123, "lng":456})
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug = True)
